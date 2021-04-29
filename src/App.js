@@ -1,17 +1,21 @@
 import './App.css';
 import { Part, Order, Supplier } from './models'
-import { DataStore, Predicates } from 'aws-amplify'
-import { useEffect, useState } from 'react';
+import { DataStore } from 'aws-amplify'
+import { useCallback, useEffect, useState } from 'react';
 
 function App() {
+  const refresh = useCallback(async() => {
+    setParts(await DataStore.query(Part))
+    setSuppliers(await DataStore.query(Supplier))
+  })
+
   const [parts, setParts] = useState([])
   const [suppliers, setSuppliers] = useState([])
   const [orders, setOrders] = useState([])
   const [selectedOrder, setSelectedOrder] = useState()
   const [isFiltered, setIsFiltered] = useState(false)
   useEffect(async () => {
-    setParts(await DataStore.query(Part))
-    setSuppliers(await DataStore.query(Supplier))
+    refresh()
   }, [setParts, setSuppliers])
 
   const thStyle = 'px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
@@ -19,7 +23,7 @@ function App() {
   return (
     <div className="App">
       <div className="flex items-center p-4">
-        <img src="./Artboard.png" alt="Header Logo"></img>
+        <img src="./Artboard.png" alt="Header Logo" onClick={() => refresh()}></img>
         <h1 className="px-2 font-bold text-3xl" style={{color: '#37ACC7'}}>
           Supply Chain Browser
         </h1>
