@@ -4,7 +4,9 @@ import { DataStore } from 'aws-amplify'
 import { useCallback, useEffect, useState } from 'react';
 
 function App() {
+
   const refresh = useCallback(async() => {
+    // TODO: Add logic to set Parts & Suppliers
     setParts(await DataStore.query(Part))
     setSuppliers(await DataStore.query(Supplier))
   })
@@ -14,6 +16,7 @@ function App() {
   const [orders, setOrders] = useState([])
   const [selectedOrder, setSelectedOrder] = useState()
   const [isFiltered, setIsFiltered] = useState(false)
+
   useEffect(async () => {
     refresh()
   }, [setParts, setSuppliers])
