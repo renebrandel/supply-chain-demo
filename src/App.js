@@ -2,13 +2,16 @@ import './App.css';
 import { useCallback, useEffect, useState } from 'react';
 import Orders from './Orders';
 import PartRow from "./PartRow";
+import { DataStore } from '@aws-amplify/datastore';
+import { Part, Supplier, Order} from './models'
+import { withAuthenticator } from '@aws-amplify/ui-react'
 
 function App() {
 
   const refresh = useCallback(async() => {
     // Query for parts & suppliers
-    setParts([])
-    setSuppliers([])
+    setParts(await DataStore.query(Part))
+    setSuppliers(await DataStore.query(Supplier))
   })
 
   const [parts, setParts] = useState([])
@@ -22,11 +25,13 @@ function App() {
 
   const showPartOrders = useCallback(async (partId) => {
     // Query for Orders from given part
+    setOrders(await DataStore.query(Order, o => o.partID('eq', partId)))
   });
 
   const filterToPartSupplier = useCallback(async (supplierId) => {
     setIsFiltered(true)
     // Query for parts with given supplier
+    setParts(await DataStore.query(Part, p => p.supplierID('eq', supplierId)))
   });
 
   useEffect(async () => {
@@ -74,4 +79,4 @@ function App() {
   );
 }
 
-export default App;
+export default withAuthenticator(App);

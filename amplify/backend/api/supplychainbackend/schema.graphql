@@ -1,0 +1,35 @@
+enum OrderStatus {
+  PROCURED
+  SHIPPING
+  COMPLETE
+  OPEN
+}
+
+type Location {
+  lat: Float
+  long: Float
+}
+
+type Part @model @auth(rules: [{allow: public}]) @key(name: "bySupplier", fields: ["supplierID"]) {
+  id: ID!
+  name: String
+  supplierID: ID
+  Orders: [Order] @connection(keyName: "byPart", fields: ["id"])
+}
+
+type Supplier @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  address: String
+  Parts: [Part] @connection(keyName: "bySupplier", fields: ["id"])
+}
+
+type Order @model @auth(rules: [{allow: public}]) @key(name: "byPart", fields: ["partID"]) {
+  id: ID!
+  quantity: Int
+  costCenter: String
+  location: Location
+  orderStatus: OrderStatus
+  partID: ID
+}
+ 
