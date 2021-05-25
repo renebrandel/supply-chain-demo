@@ -22,13 +22,11 @@ function App() {
 
   const showPartOrders = useCallback(async (partId) => {
     // Query for Orders from given part
-    // setOrders(await DataStore.query(Order, o => o.partID('eq', partId)))
   });
 
   const filterToPartSupplier = useCallback(async (supplierId) => {
     setIsFiltered(true)
     // Query for parts with given supplier
-    // setParts(await DataStore.query(Part, p => p.supplierID('eq', supplierId)))
   });
 
   useEffect(async () => {
@@ -75,5 +73,5 @@ function App() {
     </div>
   );
 }
+
 export default App;
-// export default withAuthenticator(App);
